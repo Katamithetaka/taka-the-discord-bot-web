@@ -1,3 +1,5 @@
+
+
 #[cfg(feature = "ssr")]
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -6,12 +8,16 @@ async fn main() -> std::io::Result<()> {
     use leptos::*;
     use leptos_actix::{generate_route_list, LeptosRoutes};
     use leptos_start::app::*;
-
+    
+    dotenvy::dotenv().unwrap();
     let conf = get_configuration(None).await.unwrap();
     let addr = conf.leptos_options.site_addr;
     // Generate the list of routes in your Leptos App
+    // FetchCats::register_explicit().unwrap();
     let routes = generate_route_list(|cx| view! { cx, <App/> });
-
+    // dbg!(&routes);
+    GetLogs::register_explicit();
+    // dbg!(&routes);
     HttpServer::new(move || {
         let leptos_options = &conf.leptos_options;
         let site_root = &leptos_options.site_root;
