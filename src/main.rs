@@ -7,7 +7,7 @@ async fn main() -> std::io::Result<()> {
     use actix_web::*;
     use leptos::*;
     use leptos_actix::{generate_route_list, LeptosRoutes};
-    use leptos_start::app::*;
+    use taka_the_discord_bot_web::app::*;
     
     dotenvy::dotenv().unwrap();
     let conf = get_configuration(None).await.unwrap();
