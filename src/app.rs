@@ -82,12 +82,16 @@ fn Logs(cx: Scope) -> impl IntoView {
               cats.read(cx).map(|data| match data {
                 Err(_) => view! { cx,  <pre>"Error"</pre> }.into_view(cx),
                 Ok(cats) => {
-                    cats.iter().map(|cat| {
-                        view! { cx, 
-                            <p> {cat}<br/> </p>
-                        }
-                    }).collect_view(cx)
-              
+                    view! {
+                        cx,
+                        <p>
+                        {cats.iter().map(|cat| {
+                            view! { cx, 
+                                <p> {cat}<br/> </p>
+                            }
+                        }).collect_view(cx)}
+                        </p>
+                    }.into_view(cx)
 
                 }
             })
