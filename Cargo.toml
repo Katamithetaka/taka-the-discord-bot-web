@@ -7,6 +7,7 @@ edition = "2021"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
+
 actix-files = { version = "0.6", optional = true }
 actix-web = { version = "4", optional = true, features = ["macros"] }
 console_error_panic_hook = "0.1"
@@ -19,6 +20,7 @@ leptos_router = { version = "0.4", features = ["nightly"] }
 wasm-bindgen = "=0.2.87"
 serde = { version = "1.0.185", features = ["derive"] }
 dotenvy = "0.15.7"
+
 
 [features]
 csr = ["leptos/csr", "leptos_meta/csr", "leptos_router/csr"]
@@ -42,7 +44,7 @@ panic = "abort"
 
 [package.metadata.leptos]
 # The name used by wasm-bindgen/cargo-leptos for the JS/WASM bundle. Defaults to the crate name   
-output-name = "leptos_start"
+output-name = "taka-the-discord-bot-web"
 # The site root folder is where cargo-leptos generate all output. WARNING: all content of this folder will be erased on a rebuild. Use it in your server setup.
 site-root = "target/site"
 # The site-root relative folder where all compiled output (JS, WASM and CSS) is written
@@ -56,7 +58,7 @@ style-file = "style/main.scss"
 # Optional. Env: LEPTOS_ASSETS_DIR.
 assets-dir = "assets"
 # The IP and port (ex: 127.0.0.1:3000) where the server serves the content. Use it in your server setup.
-site-addr = "127.0.0.1:3000"
+site-addr = "0.0.0.0:80"
 # The port to use for automatic reload monitoring
 reload-port = 3001
 # [Optional] Command to use when running end2end tests. It will run in the end2end dir.
