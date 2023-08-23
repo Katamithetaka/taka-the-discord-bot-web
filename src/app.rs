@@ -53,7 +53,7 @@ pub async fn get_logs() -> Result<Vec<String>, ServerFnError> {
     .max_by_key(|x| x.metadata().unwrap().modified().unwrap()).unwrap(); // Get the most recently modified file
 
     let value = std::fs::read_to_string(format!("{}", last_modified_file.path().to_str().unwrap())).unwrap();
-    let return_val = value.lines().collect();
+    let return_val = value.lines().map(|c| c.to_string()).collect();
     Ok(return_val)
 }
 
