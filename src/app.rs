@@ -44,7 +44,7 @@ fn HomePage(cx: Scope) -> impl IntoView {
 
 
 #[server(GetLogs, "/api")]
-pub async fn get_logs() -> Result<String, ServerFnError> {
+pub async fn get_logs() -> Result<Vec<String>, ServerFnError> {
     let path = std::env::var("LOG_FILE_DIRECTORY");
     let last_modified_file = std::fs::read_dir(path.unwrap_or(String::from("./logs")))
     .expect("Couldn't access local directory")
@@ -52,8 +52,9 @@ pub async fn get_logs() -> Result<String, ServerFnError> {
     .filter(|f| f.metadata().unwrap().is_file()) // Filter out directories (only consider files)
     .max_by_key(|x| x.metadata().unwrap().modified().unwrap()).unwrap(); // Get the most recently modified file
 
-    let content = std::fs::read_to_string(format!("{}", last_modified_file.path().to_str().unwrap())).unwrap();
-    Ok(content)
+    let value = std::fs::read_to_string(format!("{}", last_modified_file.path().to_str().unwrap())).unwrap();
+    let return_val = value.lines().collect();
+    Ok(return_val)
 }
 
 // #[server(FetchCats, "/api")]
@@ -62,7 +63,7 @@ pub async fn get_logs() -> Result<String, ServerFnError> {
 //     Ok(vec![how_many.to_string()])
 //   }
 
-#[component]
+// #[component]
 fn Logs(cx: Scope) -> impl IntoView {
     let (cat_count, _set_cat_count) = create_signal::<u32>(cx, 1);
     let (_pending, set_pending) = create_signal(cx, false);
@@ -70,6 +71,9 @@ fn Logs(cx: Scope) -> impl IntoView {
         create_resource(cx, move || cat_count.get(), |count| get_logs());
     view! { cx,
       <div>
+      <link rel="stylesheet" href="https://unpkg.com/terminal.css@0.7.2/dist/terminal.min.css" />
+      <link rel="stylesheet" href="https://unpkg.com/terminal.css@0.7.1/dist/terminal.min.css" />
+      <link rel="stylesheet" href="https://unpkg.com/terminal.css@0.7.1/dist/terminal.min.css" />
         <Transition
           fallback=move || view! { cx, <p>"Loading..."</p>}
           set_pending=set_pending.into()
@@ -77,7 +81,15 @@ fn Logs(cx: Scope) -> impl IntoView {
           {move || {
               cats.read(cx).map(|data| match data {
                 Err(_) => view! { cx,  <pre>"Error"</pre> }.into_view(cx),
-                Ok(cats) => view! {cx, <p>"It works!!" {cats}</p>}.into_view(cx)
+                Ok(cats) => {
+                    cats.iter().map(|cat| {
+                        view! { cx, 
+                            <p> {cat}<br/> </p>
+                        }
+                    }).collect_view(cx)
+              
+
+                }
             })
           }}
         </Transition>
